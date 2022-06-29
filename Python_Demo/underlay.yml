@@ -1,0 +1,21 @@
+devices:
+  leaf1-DC1:
+    interfaces: 
+      lo0: 
+        ipv4: 192.168.101.11
+        mask: 32
+      lo1: 192.168.102.11/32
+      Ethernet3: 192.168.103.0/31
+      Ethernet4: 192.168.103.2/31
+      Ethernet5: 192.168.103.4/31
+    BGP:
+      ASN: 65101
+  leaf2-DC1:
+    interfaces: 
+      lo0: 192.168.101.12/32
+      lo1: 192.168.102.11/32
+      Ethernet3: 192.168.103.0/31
+      Ethernet4: 192.168.103.2/31
+      Ethernet5: 192.168.103.4/31
+    BGP:
+      ASN: 65101     
