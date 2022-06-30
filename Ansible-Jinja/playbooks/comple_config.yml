@@ -1,0 +1,12 @@
+---
+- hosts: DC1, DC2
+  name: Concatenate files
+  tasks:
+  - name: Copy ATD-INFRA 
+    copy:
+      src: "{{lookup('env','PWD')}}/configs/Static/ATD-INFRA.cfg"
+      dest: "{{lookup('env','PWD')}}/configs/{{inventory_hostname}}"
+  - name: Assemble files
+    assemble:
+      src: "{{lookup('env','PWD')}}/configs/{{inventory_hostname}}"
+      dest: "{{lookup('env','PWD')}}/configs/final/{{inventory_hostname}}_final.cfg"

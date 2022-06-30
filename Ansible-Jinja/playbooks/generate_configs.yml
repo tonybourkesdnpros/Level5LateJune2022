@@ -1,0 +1,54 @@
+---
+- hosts: DC1, DC2
+  name: Create a management config
+  tags: "base"
+  tasks:
+  - name: Register variables from YAML data models
+    include_vars:
+      file: "{{lookup('env','PWD')}}/vars/mgmt.yml"
+      name: mgmt
+  - name: Generate config from template
+    template:
+      src: "{{lookup('env','PWD')}}/templates/base.j2"
+      dest: "{{lookup('env','PWD')}}/configs/{{inventory_hostname}}/{{inventory_hostname}}_base.cfg"
+
+- hosts: leafs_DC1, leafs_DC2
+  name: Create a an underlay/EVPN overlay config for leafs
+  tasks:
+  - name: Register variables from YAML data models
+    include_vars:
+      file: "{{lookup('env','PWD')}}/vars/underlay.yml"
+      name: underlay
+  - name: Generate config from template
+    template:
+      src: "{{lookup('env','PWD')}}/templates/evpn_leafs.j2"
+      dest: "{{lookup('env','PWD')}}/configs/{{inventory_hostname}}/{{inventory_hostname}}_EVPN.cfg"
+
+
+- hosts: spines_DC1, spines_DC2
+  name: Create a an underlay/EVPN overlay config for spines
+  tasks:
+  - name: Register variables from YAML data models
+    include_vars:
+      file: "{{lookup('env','PWD')}}/vars/underlay.yml"
+      name: underlay
+  - name: Generate config from template
+    template:
+      src: "{{lookup('env','PWD')}}/templates/evpn_spines.j2"
+      dest: "{{lookup('env','PWD')}}/configs/{{inventory_hostname}}/{{inventory_hostname}}_EVPN.cfg"
+
+- hosts: leafs_DC1, leafs_DC2
+  name: Create a an underlay/EVPN overlay config for leafs
+  tasks:
+  - name: Register variables from YAML data models
+    include_vars:
+      file: "{{lookup('env','PWD')}}/vars/underlay.yml"
+      name: underlay
+  - name: Register variables from YAML data models for VXLAN Tenants
+    include_vars:
+      file: "{{lookup('env','PWD')}}/vars/Tenants.yml"
+      name: VXLAN
+  - name: Generate config from template
+    template:
+      src: "{{lookup('env','PWD')}}/templates/VXLAN_Tenant.j2"
+      dest: "{{lookup('env','PWD')}}/configs/{{inventory_hostname}}/{{inventory_hostname}}_VXLAN.cfg"

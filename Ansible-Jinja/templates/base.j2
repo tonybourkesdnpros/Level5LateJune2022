@@ -1,0 +1,11 @@
+hostname {{inventory_hostname}}
+!
+interface Management0
+   ip address {{ mgmt['devices'][inventory_hostname] }}
+!
+dns domain arista.lab
+!
+ip route 0.0.0.0/0 192.168.0.1
+!
+ip routing
+!

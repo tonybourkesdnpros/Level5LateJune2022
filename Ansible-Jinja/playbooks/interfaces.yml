@@ -1,0 +1,12 @@
+---
+- hosts: DC1, DC2
+  name: Create a simple config from a template
+  tasks:
+  - name: Register variables from YAML data models
+    include_vars:
+      file: "{{lookup('env','PWD')}}/vars/underlay.yml"
+      name: underlay
+  - name: Generate config from template
+    template:
+      src: "{{lookup('env','PWD')}}/templates/interfaces.j2"
+      dest: "{{lookup('env','PWD')}}/configs/{{inventory_hostname}}/{{inventory_hostname}}_interfaces.cfg"

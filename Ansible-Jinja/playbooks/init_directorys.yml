@@ -1,0 +1,8 @@
+---
+- hosts: DC1, DC2
+  name: Initialize Directories
+  tasks:
+  - name: Create a directory if it does not exist
+    ansible.builtin.file:
+      path: "{{lookup('env','PWD')}}/configs/{{inventory_hostname}}"
+      state: directory

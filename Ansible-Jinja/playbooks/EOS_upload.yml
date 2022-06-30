@@ -1,0 +1,9 @@
+---
+- hosts: DC1, DC2
+  name: Upload interface configurations
+  tasks:
+  - name: upload configuration to switch
+    arista.eos.eos_config:
+      src: "{{lookup('env','PWD')}}/configs/final/{{inventory_hostname}}_final.cfg"
+      replace: config
+      save_when: always
