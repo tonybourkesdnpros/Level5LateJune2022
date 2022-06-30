@@ -1,0 +1,21 @@
+---
+- hosts: DC1, DC2
+  name: Add SSH user and keys
+  tasks:
+  - name: Add user Automator
+    eos_user:
+      name: automator
+      state: present
+      nopassword: yes
+  - name: Parameters
+    eos_user:
+      name: automator
+      privilege: 15
+      role: network-admin
+      state: present
+      nopassword: yes
+  - name: Add SSH keys
+    eos_user:
+      name: automator 
+      sshkey: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCU+d1NEGHklnVtxTQEp3IFe+BhGQVnYzLRwe9lDWgm1GRmxiC2sk2ztFkvoK75hQiDEvYc3Q0LqPaEXsHaF5bRH2/TBMPGk8MOgvGUMpiCNyKz68HbmpLvanwuppOv0dBgEHDPatkIoMX5dlhcPrCwPXlpGxVNlyinAPn2w5RBihAl4snO5On0GHcT5POoz/+CRkGqkz96gh/gPjk0s4TJnlMAwNCpojIL+RknJpQkXyi1f5FZ4s1+kASAh1qllRwQhu0P9bzee0CB+iSB9VSXbBvVPaplIk0hmD6sxFmcPb5GOPHpH9+4L1eeIY7N1D9tIt3/y159dF0FwTCSaOt7 arista@tony-apac-l5-18-3bc31bc3"
+      state: present

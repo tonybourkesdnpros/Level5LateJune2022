@@ -1,0 +1,12 @@
+---
+- hosts: DC1
+  name: Create a simple config from a template
+  tasks:
+  - name: Register variables from YAML data models
+    include_vars:
+      file: "{{lookup('env','PWD')}}/vars/basic.yml"
+      name: basic_config
+  - name: Generate config from template
+    template:
+      src: "{{lookup('env','PWD')}}/templates/mgmt.j2"
+      dest: "{{lookup('env','PWD')}}/configs/{{inventory_hostname}}_simple.cfg"

@@ -1,0 +1,14 @@
+---
+- hosts: OOB-CORE
+  name: VLAN operations
+  tasks:
+  - name: Delete VLAN 10
+    eos_vlans:
+      config:
+      - vlan_id: 20
+        state: active
+      state: deleted
+  - name: Save Configuration
+    eos_command:
+      commands:
+      - copy run start
