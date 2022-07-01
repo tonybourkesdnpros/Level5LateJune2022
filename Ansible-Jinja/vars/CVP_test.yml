@@ -1,0 +1,8 @@
+
+CVP_DEVICES_TEST:
+  - fqdn: 'leaf1-DC1'
+    parentContainerName: 'Left-DC1'
+    configlets:
+      - 'ATD-INFRA'
+      - 'leaf1-DC1-BASE'
+      - 'MLAG-Left'

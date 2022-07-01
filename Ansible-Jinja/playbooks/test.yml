@@ -1,0 +1,17 @@
+---
+- name: Apply Configlets
+  hosts: CloudVision
+  connection: local
+  vars: 
+    path: "{{lookup('env','PWD')}}"
+  vars_files: 
+    - ../vars/CVP_test.yml
+  tasks:
+    - name: Apply configlets
+      arista.cvp.cv_device_v3:
+        devices: "{{ CVP_DEVICES_TEST }}"
+        apply_mode: strict
+      register: configlets
+    - name: Run change control
+      arista.cvp.cv_task_v3:
+        tasks: "{{ configlets.taskIds }}"

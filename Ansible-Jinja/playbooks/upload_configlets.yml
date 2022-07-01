@@ -1,0 +1,12 @@
+---
+- name: Upload Configlets
+  hosts: CloudVision
+  vars: 
+    path: "{{lookup('env','PWD')}}"
+  vars_files: 
+     - ../vars/CVP_model.yml
+  tasks:
+    - name: Upload Configlets for EVPN Underlay
+      arista.cvp.cv_configlet_v3:
+        configlets: "{{ CVP_CONFIGLETS_EVPN }}"
+        state: present 

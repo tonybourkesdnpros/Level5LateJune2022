@@ -1,0 +1,15 @@
+---
+- name: Upload configlet
+  hosts: CloudVision
+  vars:
+    - path: "{{lookup('env','PWD')}}"
+  vars_files:
+    - ../vars/CVP_model.yml
+  tasks:
+    # - name: Upload configlet
+    #   arista.cvp.cv_configlet_v3:
+    #     configlets: "{{CVP_CONFIGLETS}}"
+    #     state: present
+    - name: Set containers
+      arista.cvp.cv_container_v3:
+        topology: "{{CONTAINERS_TEST}}"

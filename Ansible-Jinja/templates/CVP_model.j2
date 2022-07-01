@@ -1,0 +1,55 @@
+path: {%raw%}"{{lookup('env','PWD')}}"{%endraw%} 
+
+CVP_CONFIGLETS_EVPN:
+  MLAG-Left: {%raw %}"{{lookup('file','{{path}}{% endraw %}/configs/Static/MLAG-Left.cfg')}}"
+  MLAG-Right: {%raw %}"{{lookup('file','{{path}}{% endraw %}/configs/Static/MLAG-Right.cfg')}}"
+{% for host in underlay %}
+{% if host != 'global' %}
+  {{host}}_EVPN_underlay: {%raw %}"{{lookup('file','{{path}}/configs/{% endraw %}{{host}}/{{host}}_EVPN.cfg')}}"
+  {{host}}_interface: {%raw %}"{{lookup('file','{{path}}/configs/{% endraw %}{{host}}/{{host}}_interfaces.cfg')}}"
+{% endif %}
+{% if 'leaf' in host %}
+  {{host}}_VXLAN: {%raw %}"{{lookup('file','{{path}}/configs/{% endraw %}{{host}}/{{host}}_VXLAN.cfg')}}"
+{% endif %}
+{% endfor %}
+
+  {# eBGP-Underlay-spine1-DC1: "{{lookup('file','{{path}}/configlets/eBGP-VXLAN/eBGP_underlay_spine1-DC1.cfg')}}" #}
+
+
+CVP_DEVICES_EVPN:
+
+{% for host in underlay %}
+{% if host != 'global' %}
+  - fqdn: '{{host}}'
+{% if 'leaf' in host %}
+{% if 'DC1' in host %}
+    parentContainerName: 'Leaf-DC1'
+{% endif %}
+{% if 'DC2' in host %}
+    parentContainerName: 'Leaf-DC2'
+{% endif %}
+{% endif %}
+{% if 'spine' in host %}
+{% if 'DC1' in host %}
+    parentContainerName: 'Spine-DC1'
+{% endif %}
+{% if 'DC2' in host %}
+    parentContainerName: 'Spine-DC2'
+{% endif %}
+{% endif %}
+    configlets:
+      - 'ATD-INFRA'
+      - '{{ host }}-BASE'
+      - '{{ host }}_EVPN_underlay'
+      - '{{ host }}_interface'
+{% if 'leaf' in host %}
+      - '{{ host }}_VXLAN'
+{% if 'Odd' in underlay[host]['MLAG']%}
+      - 'MLAG-Left'
+{%endif%}
+{% if 'Even' in underlay[host]['MLAG']%}
+      - 'MLAG-Right'
+{%endif%}
+{%endif%}
+{% endif %}
+{% endfor %}

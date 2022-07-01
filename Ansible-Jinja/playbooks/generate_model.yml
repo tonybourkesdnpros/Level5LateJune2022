@@ -1,0 +1,13 @@
+---
+- name: Create CVP Data Model 
+  hosts: CloudVision
+  connection: local
+  tasks:
+    - name: Register variables (underlay)
+      include_vars:
+        file: "{{lookup('env','PWD')}}/vars/underlay.yml"
+        name: underlay
+    - name: Generate Var data structure
+      template: 
+        src: "{{lookup('env','PWD')}}/templates/CVP_model.j2"
+        dest: "{{lookup('env','PWD')}}/vars/CVP_model.yml"
